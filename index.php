@@ -8,7 +8,7 @@ $router = new Router(__DIR__);
 $router->define_route("/", "main.php");
 $router->define_route("", "main.php");
 
-$router->define_route("/api/v1", "main.php");
+$router->define_route("/api/v1", "");
 
 $router->start();
 ?>

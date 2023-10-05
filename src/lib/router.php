@@ -10,8 +10,10 @@ class Router {
     private $routes_path = "";
 
     function __construct($base_dir) {
-        $this->uri = $_SERVER["REQUEST_URI"];
-        $this->routes_path = $base_dir . $this->join_path("", "src", "routes");
+        $uriWithoutParams = strtok($_SERVER["REQUEST_URI"], "?");
+        $uriWithoutTrailing = rtrim($uriWithoutParams, '/');
+        $this->uri = $uriWithoutTrailing;
+        $this->routes_path = $base_dir . $this->join_path("", "routes");
         $this->base_path = $base_dir;
     }
 
