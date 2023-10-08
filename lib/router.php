@@ -11,6 +11,7 @@ class Router {
     private $routes = array();
     private $base_path = "";
     private $routes_path = "";
+    private $html_headers = "";
 
     function __construct($base_dir) {
         $uriWithoutParams = strtok($_SERVER["REQUEST_URI"], "?");
@@ -125,6 +126,14 @@ class Router {
                 return $this->render_notfound("file does not exist. <br>" . $route["filepath"]);
             }
 
+            if($route["route"] == $this->uri && $route['method'] == "GET") {
+                ob_start();
+                require $route["filepath"];
+                $content = ob_get_clean();
+                print_r(str_replace("</head>", $this->html_headers . "</head>", $content));
+                return;
+            }
+
             if($route["route"] == $this->uri) {
                 require $route["filepath"];
                 return;
@@ -132,6 +141,17 @@ class Router {
         }
 
         return $this->render_notfound($this->uri);
+    }
+
+    /**
+     * Defines a HTML header that will get inserted in the head of the html page.
+     * Only works on get requests
+     * 
+     * @param string $header HTML header
+     * @return void
+     */
+    function define_global_html_header(string $header) {
+        $this->html_headers .= $header;
     }
 
 }
